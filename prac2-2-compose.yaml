@@ -1,0 +1,34 @@
+services:
+  back:
+    image: openjdk:17-jdk-alpine
+    working_dir: /app
+    command: sh -c "java -jar *.jar"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./studentapi/target:/app
+    environment:
+      - mysql_user=root
+      - mysql_password=abc123
+      - mysql_url=dbserver
+    networks:
+      dbnet:
+        ipv4_address: 192.168.100.252
+    restart: on-failure
+  dbserver:
+    image: mysql:8.0.33
+    volumes:
+      - ./studentdb:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=abc123
+      - MYSQL_USER=dev1
+      - MYSQL_PASSWORD=x_eRT2vv4
+      - MYSQL_DATABASE=school
+    networks:
+      dbnet:
+        ipv4_address: 192.168.100.251
+networks:
+  dbnet:
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
