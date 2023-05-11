@@ -1,0 +1,20 @@
+services:
+  back:
+    image: openjdk:17-jdk-alpine
+    working_dir: /app
+    command: sh -c "./mvnw clean package && java -jar ./target/*.jar"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "dbserver"
+    volumes:
+      - ./studentapi:/app
+  dbserver:
+    image: mysql:8.0.33
+    volumes:
+      - ./studentdb:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=abc123
+      - MYSQL_USER=dev1
+      - MYSQL_PASSWORD=x_eRT2vv4
+      - MYSQL_DATABASE=school
