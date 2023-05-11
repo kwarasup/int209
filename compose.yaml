@@ -1,0 +1,16 @@
+services:
+  front:
+    image: f1
+    build:
+      context: .
+      dockerfile: front/frontDockerfile
+    ports:
+      - "3000:80"
+  back:
+    image: openjdk:17-jdk-alpine
+    working_dir: /app
+    command: sh -c "java -jar *.jar"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api/target:/app
